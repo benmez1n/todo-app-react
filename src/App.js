@@ -1,8 +1,14 @@
-import { useState} from 'react'
+import { useEffect , useState} from 'react'
 import ToDoList from './ToDOList';
 
+const getLocalStorage = () => {
+  let storageList = localStorage.getItem('list');
+  let myList = storageList ? JSON.parse(localStorage.getItem('list')) : [];
+  return myList;
+}
+
 function App() {
-  const [list,setList] = useState([]);
+  const [list,setList] = useState(getLocalStorage);
   const [task,setTask] = useState('');
   const [alert,setAlert] = useState(
     {show : false,msg:"",type:""}
@@ -47,6 +53,9 @@ function App() {
     setList(list.filter((element)=>{return element !== item}))
     console.log(list)
   }
+  useEffect(()=>{
+      localStorage.setItem('list',JSON.stringify(list))
+  },[list])
   return (
     <div className="App">
       <main>
